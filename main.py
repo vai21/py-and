@@ -1,11 +1,13 @@
 import asyncio
 import struct
+import dbConnection
 from bleak import BleakClient
 
 device_address = '00:09:1F:8E:2B:3A'  # Replace with your device's BLE address
 BP_MEASUREMENT_CHAR_UUID = '00002a35-0000-1000-8000-00805f9b34fb'
 
 def notification_handler(sender, data):
+    # print(data)
     flags = data[0]
 
     unit_mmHg = not (flags & 0x01)
@@ -28,6 +30,20 @@ def notification_handler(sender, data):
     print(f"Pulse Rate: {result[7]} {"/min."}")
 
     # Parse additional fields as needed
+    add_bp = ("INSERT INTO bp_bp "
+               "(name, systolic, diastolic, meanarterialpressure, pulserate) "
+               "VALUES (%s, %s, %s, %s, %s)")
+    cnx = dbConnection.connect()
+    cursor = cnx.cursor()
+
+    name = input("Please input your name: ")
+    print("You entered: " + name)
+
+    data_bp = (name, result[0], result[1], result[2], result[7])
+    cursor.execute(add_bp, data_bp)
+    cnx.commit()
+    cursor.close()
+    cnx.close()
 
 async def run():
     async with BleakClient(device_address) as client:
@@ -39,6 +55,6 @@ async def run():
 
         # Keep the script running to receive notifications
         while True:
-            await asyncio.sleep(1)
+            await asyncio.sleep(10)
 
 asyncio.run(run())
