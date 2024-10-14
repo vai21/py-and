@@ -7,14 +7,15 @@ device_address = '00:09:1F:8E:2B:3A'  # Replace with your device's BLE address
 BP_MEASUREMENT_CHAR_UUID = '00002a35-0000-1000-8000-00805f9b34fb'
 
 def notification_handler(sender, data):
+    print(sender)
     print(data)
     flags = data[0]
 
     unit_mmHg = not (flags & 0x01)
-    timestamp_present = flags & 0x02
-    pulse_rate_present = flags & 0x04
-    user_id_present = flags & 0x08
-    measurement_status_present = flags & 0x10
+    # timestamp_present = flags & 0x02
+    # pulse_rate_present = flags & 0x04
+    # user_id_present = flags & 0x08
+    # measurement_status_present = flags & 0x10
 
     if unit_mmHg:
         unit = "mmHg"
@@ -23,23 +24,24 @@ def notification_handler(sender, data):
 
     # Blood Pressure Measurement
     result = struct.unpack_from('<HHHHHHBBxxx', data, 1)
+    systolic = result[0]
+    diastolic = result[1]
+    mean_arterial_pressure = result[2]
+    pulse_rate = result[7]
 
-    print(f"Systolic: {result[0]} {unit}")
-    print(f"Diastolic: {result[1]} {unit}")
-    print(f"Mean Arterial Pressure: {result[2]} {unit}")
-    print(f"Pulse Rate: {result[7]} {"/min."}")
+    print(f"Systolic: {systolic} {unit}")
+    print(f"Diastolic: {diastolic} {unit}")
+    print(f"Mean Arterial Pressure: {mean_arterial_pressure} {unit}")
+    print(f"Pulse Rate: {pulse_rate} {"/min."}")
 
     # Parse additional fields as needed
     add_bp = ("INSERT INTO bp_bp "
-               "(name, systolic, diastolic, meanarterialpressure, pulserate) "
+               "(systolic, diastolic, meanarterialpressure, pulserate) "
                "VALUES (%s, %s, %s, %s, %s)")
     cnx = dbConnection.connect()
     cursor = cnx.cursor()
 
-    name = input("Please input your name: ")
-    print("You entered: " + name)
-
-    data_bp = (name, result[0], result[1], result[2], result[7])
+    data_bp = (systolic, diastolic, mean_arterial_pressure, pulse_rate)
     cursor.execute(add_bp, data_bp)
     cnx.commit()
     cursor.close()
