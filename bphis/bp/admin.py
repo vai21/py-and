@@ -12,11 +12,19 @@ class BpAdmin(admin.ModelAdmin):
         "diastolic",
         "meanarterialpressure",
         "pulserate",
+        "created_at",
     ]
+
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
-            return []
-        return ['systolic', 'diastolic', 'meanarterialpressure', 'pulserate']
+            return ["created_at"]
+        return [
+            "systolic",
+            "diastolic",
+            "meanarterialpressure",
+            "pulserate",
+            "created_at",
+        ]
 
 # Register your models here.
 admin.site.register(Bp, BpAdmin)
