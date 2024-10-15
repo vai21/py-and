@@ -7,4 +7,5 @@ class Bp(models.Model):
     diastolic = models.CharField(max_length=200, verbose_name='Diastolic (DIA)')
     meanarterialpressure = models.CharField(max_length=200, verbose_name='Mean Arterial Pressure (MAP)')
     pulserate = models.CharField(max_length=200, verbose_name='Pulse Rate (PR)')
+    ihb = models.BooleanField(verbose_name="Irregular Heart Beats", blank=True)
     created_at = models.DateTimeField(verbose_name='Created At', auto_now_add=True)

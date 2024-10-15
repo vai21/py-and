@@ -1,27 +1,12 @@
-# Check if Python is installed
-if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Host "Python is not installed or not added to the PATH." -ForegroundColor Red
-    exit 1
-}
+# Start main.py as a background process
+$main = Start-Process python -ArgumentList "main.py" -NoNewWindow -PassThru
 
-# Check if manage.py exists in the current directory
-if (-not (Test-Path "./manage.py")) {
-    Write-Host "manage.py not found in the current directory. Ensure you're in the correct project folder." -ForegroundColor Yellow
-    exit 1
-}
+# Start manage.py runserver as another background process
+$server = Start-Process python -ArgumentList "manage.py runserver" -NoNewWindow -PassThru
 
-# Run Bluetooth LE Receiver
-Write-Host "Starting Django development server..." -ForegroundColor Green
-try {
-    python main.py
-} catch {
-    Write-Host "Failed to start the server. Check your Python/Django setup." -ForegroundColor Red
-}
+# Optional: Wait until both processes exit (if you want to ensure they complete)
+Wait-Process -Id $main.Id, $server.Id
 
-# Run Django server
-Write-Host "Starting Django development server..." -ForegroundColor Green
-try {
-    python manage.py runserver
-} catch {
-    Write-Host "Failed to start the server. Check your Python/Django setup." -ForegroundColor Red
-}
+# Optionally print process IDs
+Write-Host "main.py running with PID: $($main.Id)"
+Write-Host "manage.py runserver running with PID: $($server.Id)"

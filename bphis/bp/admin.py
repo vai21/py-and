@@ -10,8 +10,8 @@ class BpAdmin(admin.ModelAdmin):
         "name",
         "systolic",
         "diastolic",
-        "meanarterialpressure",
         "pulserate",
+        "ihb",
         "created_at",
     ]
 

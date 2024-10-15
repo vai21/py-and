@@ -7,8 +7,8 @@ device_address = '00:09:1F:8E:2B:3A'  # Replace with your device's BLE address
 BP_MEASUREMENT_CHAR_UUID = '00002a35-0000-1000-8000-00805f9b34fb'
 
 def notification_handler(sender, data):
-    print(sender)
-    print(data)
+    # print(f"CHaracteristic ID: {sender}")
+    # print(f"Raw Data: {data}")
     flags = data[0]
 
     unit_mmHg = not (flags & 0x01)
@@ -24,6 +24,7 @@ def notification_handler(sender, data):
 
     # Blood Pressure Measurement
     result = struct.unpack_from('<HHHHHHBBxxx', data, 1)
+    # print(f"Result: {result}")
     systolic = result[0]
     diastolic = result[1]
     mean_arterial_pressure = result[2]
@@ -37,7 +38,7 @@ def notification_handler(sender, data):
     # Parse additional fields as needed
     add_bp = ("INSERT INTO bp_bp "
                "(systolic, diastolic, meanarterialpressure, pulserate) "
-               "VALUES (%s, %s, %s, %s, %s)")
+               "VALUES (%s, %s, %s, %s)")
     cnx = dbConnection.connect()
     cursor = cnx.cursor()
 
@@ -57,6 +58,6 @@ async def run():
 
         # Keep the script running to receive notifications
         while True:
-            await asyncio.sleep(10)
+            await asyncio.sleep(10, result='Continue...')
 
 asyncio.run(run())
