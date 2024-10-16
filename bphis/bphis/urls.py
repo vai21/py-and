@@ -20,12 +20,12 @@ from django.urls import include, path
 
 from . import views
 
-admin.site.site_header = 'BP A&D DXG HIS' # default: "Django Administration"
+admin.site.site_header = 'DXG HIS' # default: "Django Administration"
 admin.site.index_title = 'Features area' # default: "Site administration"
-admin.site.site_title = 'BP A&D DXG HIS' # default: "Django site admin"
+admin.site.site_title = 'DXG HIS' # default: "Django site admin"
 
 urlpatterns = [
     path("bp/", include("bp.urls")),
     path("admin/", admin.site.urls),
-    path("/", views.index, name="index")
+    path("", views.index, name="index")
 ]

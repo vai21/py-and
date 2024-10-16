@@ -1,13 +1,18 @@
 from django.contrib import admin
-
+from import_export import resources
+from import_export.admin import ExportActionMixin
 from .models import Bp
 
 
 # Register your models here.
-class BpAdmin(admin.ModelAdmin):
+class BpResource(resources.ModelResource):
+    class Meta:
+        model = Bp
+class BpAdmin(ExportActionMixin, admin.ModelAdmin):
     # fields = ["id", "name", "systolic", "diastolic", "meanarterialpressure", "pulserate"]
     list_display = [
-        "name",
+        "id",
+        "customer",
         "systolic",
         "diastolic",
         "pulserate",
