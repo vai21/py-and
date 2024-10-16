@@ -7,20 +7,10 @@ device_address = '00:09:1F:8E:2B:3A'  # Replace with your device's BLE address
 BP_MEASUREMENT_CHAR_UUID = '00002a35-0000-1000-8000-00805f9b34fb'
 
 def notification_handler(sender, data):
-    # print(f"CHaracteristic ID: {sender}")
-    # print(f"Raw Data: {data}")
-    flags = data[0]
-
-    unit_mmHg = not (flags & 0x01)
-    # timestamp_present = flags & 0x02
-    # pulse_rate_present = flags & 0x04
-    # user_id_present = flags & 0x08
-    # measurement_status_present = flags & 0x10
-
-    if unit_mmHg:
-        unit = "mmHg"
-    else:
-        unit = "kPa"
+    print(f"Characteristic ID: {sender}")
+    print(f"Received: {data}")
+    unit = "mmHg"
+    unit_per_min = "/min."
 
     # Blood Pressure Measurement
     result = struct.unpack_from('<HHHHHHBBxxx', data, 1)
@@ -33,7 +23,7 @@ def notification_handler(sender, data):
     print(f"Systolic: {systolic} {unit}")
     print(f"Diastolic: {diastolic} {unit}")
     print(f"Mean Arterial Pressure: {mean_arterial_pressure} {unit}")
-    print(f"Pulse Rate: {pulse_rate} {"/min."}")
+    print(f"Pulse Rate: {pulse_rate} {unit_per_min}")
 
     # Parse additional fields as needed
     add_bp = ("INSERT INTO bp_bp "

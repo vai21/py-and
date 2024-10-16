@@ -1,7 +1,7 @@
+import asyncio
 from bleak import BleakScanner
 
 DEVICE_ADDRESS = '00:09:1F:8E:2B:3A'  # Replace with your device's BLE address
-BP_MEASUREMENT_CHAR_UUID = '00002a35-0000-1000-8000-00805f9b34fb'
 
 async def discover_ble_devices():
     # Scan for available devices
@@ -13,7 +13,7 @@ async def discover_ble_devices():
 
     return devices
 
-def run():
-  discover_ble_devices()
+async def run():
+  await discover_ble_devices()
   
-run()
+asyncio.run(run())
