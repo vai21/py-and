@@ -31,5 +31,5 @@ class Patient(models.Model):
     created_at = models.DateTimeField(verbose_name='Created At', default=datetime.now)
 
 class SupportingImage(models.Model):
-    image = models.ImageField(verbose_name="Image")
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name="Image", upload_to='static')
+    patient = models.ForeignKey(Patient, on_delete=models.DO_NOTHING)

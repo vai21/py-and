@@ -9,10 +9,11 @@ class BpResource(resources.ModelResource):
     class Meta:
         model = Bp
 class BpAdmin(ExportActionMixin, admin.ModelAdmin):
-    # fields = ["id", "name", "systolic", "diastolic", "meanarterialpressure", "pulserate"]
+
     list_display = [
         "id",
-        "customer",
+        
+        "customer_id",
         "systolic",
         "diastolic",
         "pulserate",
