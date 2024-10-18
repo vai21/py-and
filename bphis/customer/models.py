@@ -14,5 +14,6 @@ class Customer(models.Model):
     idcard = models.CharField(max_length=20, verbose_name='KTP', blank=True)
     mobile = models.CharField(max_length=20, verbose_name='Mobile Number', blank=True)
     blood_type = models.CharField(max_length=2, verbose_name="Blood Type", blank=True)
+    height = models.IntegerField(verbose_name='Body Height', blank=True, null=True, default=0)
     profile_pic = models.ImageField(verbose_name="Profile Picture", blank=True, upload_to='static')
     created_at = models.DateTimeField(verbose_name='Created At', default=datetime.now)

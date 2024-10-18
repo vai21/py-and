@@ -9,11 +9,9 @@ class BpResource(resources.ModelResource):
     class Meta:
         model = Bp
 class BpAdmin(ExportActionMixin, admin.ModelAdmin):
-
     list_display = [
         "id",
-        
-        "customer_id",
+        "customer",
         "systolic",
         "diastolic",
         "pulserate",

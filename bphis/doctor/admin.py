@@ -20,7 +20,8 @@ class PatientAdmin(admin.ModelAdmin):
 class DoctorAdmin(admin.ModelAdmin):
   list_display = [
      'id',
-     'name'
+     'name',
+     'title'
   ]
 
 admin.site.register(Patient, PatientAdmin)
