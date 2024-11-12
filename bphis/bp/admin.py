@@ -27,6 +27,9 @@ class BpAdmin(ExportActionMixin, admin.ModelAdmin):
             "diastolic",
             "meanarterialpressure",
             "pulserate",
+            "measurement_time",
+            "ihb",
+            "is_user_move",
             "created_at",
         ]
 
