@@ -1,7 +1,7 @@
 import requests
 
 def hitOpenApi(data):
-  url = 'https://api.github.com/events'
+  url = 'https://localhost:8000/api'
   systolic, diastolic, pulse_rate, date = data
   r = requests.post(url, data={
     'systolic': systolic,
@@ -9,4 +9,4 @@ def hitOpenApi(data):
     'pulse_rate': pulse_rate,
     'date': date
   })
-  return r.text
+  print(r.text)

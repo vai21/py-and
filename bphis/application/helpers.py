@@ -5,11 +5,8 @@ import time
 import pgConnection
 import services
 from serial.tools import list_ports
-from bleak import BleakClient
+from bleak import BleakClient, BleakScanner
 from datetime import datetime
-
-device_address = "00:09:1F:8E:2B:3A"  # Replace with your device's BLE address
-BP_MEASUREMENT_CHAR_UUID = "00002a35-0000-1000-8000-00805f9b34fb"
 
 
 def notification_handler(sender, data):
@@ -32,9 +29,11 @@ def notification_handler(sender, data):
     print(f"Pulse Rate: {pulse_rate} {unit_per_min}")
 
     # Parse additional fields as needed
-    add_bp = ("INSERT INTO bp_bp "
-                "(systolic, diastolic, meanarterialpressure, pulserate, created_at) "
-                "VALUES (%s, %s, %s, %s, %s)")
+    add_bp = (
+        "INSERT INTO bp_bp "
+        "(systolic, diastolic, meanarterialpressure, pulserate, created_at) "
+        "VALUES (%s, %s, %s, %s, %s)"
+    )
     cnx = pgConnection.connect()
     cursor = cnx.cursor()
 
@@ -43,47 +42,79 @@ def notification_handler(sender, data):
     cnx.commit()
     cursor.close()
     cnx.close()
-    # services.hitOpenApi(data_bp)
+    services.hitOpenApi(data_bp)
 
-async def run_bluetooth():
+
+async def run_bluetooth(device_name):
+    device_address = "00:09:1F:8E:2B:3A"  # Replace with your device's BLE address
+    BP_MEASUREMENT_CHAR_UUID = "00002a35-0000-1000-8000-00805f9b34fb"
+    """
+    Scan for Bluetooth LE devices and print their details
+    """
+    print("Scanning for Bluetooth devices...")
+    devices = await BleakScanner.discover()
+    if not devices:
+        print("No devices found")
+        return
+
+    print("\nFound devices:")
+    for device in devices:
+        if device.name != None and device_name in device.name:
+            print(f"Device name: {device.name or 'Unknown'}")
+            print(f"MAC address: {device.address}")
+            print(f"RSSI: {device.rssi}dBm")
+            print(f"Metadata: {device.metadata}")
+            print("-" * 50)
+            device_address = device.address
+
     async with BleakClient(device_address) as client:
+
         connected = await client.is_connected()
         print(f"Connected: {connected}")
 
-        await client.start_notify(BP_MEASUREMENT_CHAR_UUID, notification_handler)
-        print("Started notification...")
-
-        # Keep the script running to receive notifications
+        connected = False
         while True:
-            await asyncio.sleep(10, result="Continue...")
+            try:
+                if not connected:
+                    await client.start_notify(
+                        BP_MEASUREMENT_CHAR_UUID, notification_handler
+                    )
+                    print("Started notification...")
+                    connected = True
+                    await asyncio.sleep(5)
+                await asyncio.sleep(5)
+            except Exception as e:
+                print(str(e))
+                connected = False
+                print("Reconnecting...")
+                await asyncio.sleep(10)
 
 
 def find_com_port(device_description, case_sensitive=False):
     """
     Search for a COM port by device description.
-    
+
     Args:
         device_description (str): Full or partial device description to search for
         case_sensitive (bool): Whether to perform case-sensitive search
-        
+
     Returns:
         tuple: (port, description, hwid) if found, None if not found
     """
     # Get all available COM ports
     ports = list_ports.comports()
-    
-   
+
     # Prepare the search string
     if not case_sensitive:
         device_description = device_description.lower()
-    
+
     # Search through all ports
     for port in ports:
         current_description = port.description
         print(f"port description: {current_description}")
         if not case_sensitive:
             current_description = current_description.lower()
-            
+
         if device_description in current_description:
             return port.device, port.description, port.hwid
     return None
@@ -92,9 +123,11 @@ def find_com_port(device_description, case_sensitive=False):
 def run_serial():
     try:
         # Set up the serial connection
-        search_term = "Prolific USB-to-Serial Comm Port"  # Change this to your device description
+        search_term = (
+            "Prolific USB-to-Serial Comm Port"  # Change this to your device description
+        )
         result = find_com_port(search_term)
-        port = ''
+        port = ""
         if result:
             port, desc, hwid = result
             print(f"\nFound matching device:")
@@ -114,13 +147,13 @@ def run_serial():
                     line = ser.readline()
                     # Parse the blood pressure data
                     parts = line.split(b"\x1e")
-                    systolic = ''
-                    diastolic = ''
-                    pulse_rate = ''
-                    mean_arterial_pressure = ''
-                    irregular_heartbeat = ''
-                    user_move = ''
-                    measure_time_second = ''
+                    systolic = ""
+                    diastolic = ""
+                    pulse_rate = ""
+                    mean_arterial_pressure = ""
+                    irregular_heartbeat = ""
+                    user_move = ""
+                    measure_time_second = ""
 
                     for part in parts:
                         part_str = part.decode("ascii", errors="ignore")
@@ -157,7 +190,16 @@ def run_serial():
                     is_user_move = False
                     if user_move == 1:
                         is_user_move = True
-                    data_bp = (systolic, diastolic, mean_arterial_pressure, pulse_rate, irregular_heartbeat, is_user_move, measure_time_second, datetime.now())
+                    data_bp = (
+                        systolic,
+                        diastolic,
+                        mean_arterial_pressure,
+                        pulse_rate,
+                        irregular_heartbeat,
+                        is_user_move,
+                        measure_time_second,
+                        datetime.now(),
+                    )
                     cursor.execute(add_bp, data_bp)
                     cnx.commit()
                     cursor.close()
@@ -176,8 +218,9 @@ def run_serial():
         print("4. Insufficient permissions to access the port")
         return message
 
+
 def trigger_run_bluetooth():
     try:
-      asyncio.run(run_bluetooth())
+        asyncio.run(run_bluetooth("TM-2657"))
     except Exception as e:
         return str(e)
