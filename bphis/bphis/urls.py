@@ -17,15 +17,22 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
 
 from . import views
+from bp import views as bpViews
 
 admin.site.site_header = 'DXG HIS' # default: "Django Administration"
 admin.site.index_title = 'Features area' # default: "Site administration"
 admin.site.site_title = 'DXG HIS' # default: "Django site admin"
 
+router = routers.DefaultRouter()
+router.register(r'bp', bpViews.BpViewSet)
+
 urlpatterns = [
     path("bp/", include("bp.urls")),
     path("admin/", admin.site.urls),
-    path("", views.index, name="index")
+    path("", views.index, name="index"),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
