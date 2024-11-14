@@ -12,7 +12,7 @@ class Bp(models.Model):
             customer = self.customer
         return f'BP ID:  {self.id} | Customer: {customer} | SYS: {self.systolic} mmHg | DIA: {self.diastolic} mmHg | Pulse: {self.pulserate} / min.'
 
-    
+
     class Meta:
         ordering = ('-id',)
 
@@ -24,6 +24,7 @@ class Bp(models.Model):
     pulserate = models.CharField(max_length=200, verbose_name='Pulse Rate (PR)')
     ihb = models.IntegerField(verbose_name="Irregular Heart Beats", blank=True, null=True, default=0)
     is_user_move = models.BooleanField(verbose_name="Is User Moving?", blank=True, null=True, default=False)
+    retest = models.IntegerField(verbose_name="User Retest", blank=True, null=True, default=None)
     measurement_time = models.IntegerField(verbose_name="Measurement Time in Second", blank=True, null=True, default=0)
     temperature = models.FloatField(verbose_name="Body Temperature", blank=True, null=True)
     weight = models.FloatField(verbose_name="Weight", blank=True, null=True)

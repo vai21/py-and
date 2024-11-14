@@ -153,6 +153,7 @@ def run_serial():
                     mean_arterial_pressure = ""
                     irregular_heartbeat = ""
                     user_move = ""
+                    retest = ""
                     measure_time_second = ""
 
                     for part in parts:
@@ -169,6 +170,8 @@ def run_serial():
                             irregular_heartbeat = int(part_str[2:])
                         elif part_str.startswith("m"):
                             user_move = int(part_str[1:])
+                        elif part_str.startswith("r"):
+                            retest = int(part_str[1:])
                         elif part_str.startswith("t"):
                             measure_time_second = int(part_str[2:])
                     print(f"Systolic: {systolic} mmHg")
@@ -181,7 +184,7 @@ def run_serial():
 
                     add_bp = (
                         "INSERT INTO bp_bp "
-                        "(systolic, diastolic, meanarterialpressure, pulserate, ihb, is_user_move, measurement_time, created_at) "
+                        "(systolic, diastolic, pulserate, created_at, ihb, meanarterialpressure, is_user_move, retest, measurement_time) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                     )
                     cnx = pgConnection.connect()
@@ -190,20 +193,24 @@ def run_serial():
                     is_user_move = False
                     if user_move == 1:
                         is_user_move = True
+
                     data_bp = (
                         systolic,
                         diastolic,
-                        mean_arterial_pressure,
                         pulse_rate,
-                        irregular_heartbeat,
-                        is_user_move,
-                        measure_time_second,
                         datetime.now(),
+                        irregular_heartbeat,
+                        mean_arterial_pressure,
+                        is_user_move,
+                        retest,
+                        measure_time_second,
                     )
                     cursor.execute(add_bp, data_bp)
                     cnx.commit()
                     cursor.close()
                     cnx.close()
+
+                    services.hitOpenApi(data_bp)
         except KeyboardInterrupt:
             print("Stopped reading from serial port.")
         finally:
