@@ -10,8 +10,8 @@ class Bp(models.Model):
         customer = '-'
         if hasattr(self, 'customer'):
             customer = self.customer
-        return f'BP ID:  {self.id} / Customer: {customer} / SYS: {self.systolic} mmHg / DIA: {self.diastolic} mmHg / Pulse: {self.pulserate} / min. / temp: {self.temperature} C / weight: {self.weight}'
-        # return self.customer
+        return f'BP ID:  {self.id} | Customer: {customer} | SYS: {self.systolic} mmHg | DIA: {self.diastolic} mmHg | Pulse: {self.pulserate} / min.'
+
     
     class Meta:
         ordering = ('-id',)
@@ -27,4 +27,5 @@ class Bp(models.Model):
     measurement_time = models.IntegerField(verbose_name="Measurement Time in Second", blank=True, null=True, default=0)
     temperature = models.FloatField(verbose_name="Body Temperature", blank=True, null=True)
     weight = models.FloatField(verbose_name="Weight", blank=True, null=True)
+    group_id = models.IntegerField(verbose_name="Group", blank=True, null=True, default=None)
     created_at = models.DateTimeField(verbose_name='Created At', blank=True, null=True, default=datetime.now)

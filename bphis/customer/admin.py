@@ -29,6 +29,23 @@ class CustomerAdmin(admin.ModelAdmin):
         "created_at",
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        group_id = request.user.groups.values_list('id', flat=True).first()
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(group_id=group_id)
+    
+    def save_model(self, request, obj, form, change):
+        """
+        Given a model instance save it to the database.
+        """
+        group_id = request.user.groups.values_list('id', flat=True).first()
+        
+        if group_id:
+            obj.group_id = group_id
+        obj.save()
+
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
             return ["created_at"]

@@ -123,9 +123,9 @@ def find_com_port(device_description, case_sensitive=False):
 def run_serial():
     try:
         # Set up the serial connection
-        search_term = (
-            "Prolific USB-to-Serial Comm Port"  # Change this to your device description
-        )
+        usb_to_serial_name_1 = "Prolific USB-to-Serial Comm Port"
+        usb_to_serial_name_2 = "Prolific PL2303GT"
+        search_term = usb_to_serial_name_2
         result = find_com_port(search_term)
         port = ""
         if result:
