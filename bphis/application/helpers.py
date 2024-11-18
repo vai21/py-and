@@ -180,12 +180,13 @@ def run_serial():
                     print(f"Pulse Rate: {pulse_rate} /min")
                     print(f"Irregular Heartbeat: {irregular_heartbeat} time(s)")
                     print(f"Is User Move: {user_move}")
+                    print(f"Retest: {retest}")
                     print(f"Measurement Time: {measure_time_second} (second)")
 
                     add_bp = (
                         "INSERT INTO bp_bp "
                         "(systolic, diastolic, pulserate, created_at, ihb, meanarterialpressure, is_user_move, retest, measurement_time) "
-                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     )
                     cnx = pgConnection.connect()
                     cursor = cnx.cursor()
