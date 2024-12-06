@@ -5,17 +5,16 @@ def hitOpenApi(data):
   # url open api
   url = 'http://localhost:8000/api/bp/'
 
-  systolic, diastolic, pulse_rate, date, ihb, map, is_user_move, retest, measurement_time  = data
-  r = requests.post(url, data={
-    'systolic': systolic,
-    'diastolic': diastolic,
-    'pulserate': pulse_rate,
-    'ihb': ihb,
-    'meanarterialpressure': map,
-    'is_user_move': is_user_move,
-    'retest': retest,
-    'measurement_time': measurement_time,
-    'created_at': date
+  result = requests.post(url, data={
+    'systolic': data.systolic,
+    'diastolic': data.diastolic,
+    'pulserate': data.pulse_rate,
+    'ihb': data.ihb or None,
+    'meanarterialpressure': data.map or None,
+    'is_user_move': data.is_user_move or None,
+    'retest': data.retest or None,
+    'measurement_time': data.measurement_time or None,
+    'created_at': data.date or None
   })
   
-  print(r.text)
+  print(result.text)
