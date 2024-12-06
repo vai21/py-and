@@ -1,0 +1,77 @@
+services:
+  web_admin:
+    build:
+      context: .
+      dockerfile: ./bphis/Dockerfile
+    image: django_flask_pyand
+    command: /start_django
+    volumes:
+      - ./bphis:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  web_controller:
+    build:
+      context: .
+      dockerfile: ./bphis/Dockerfile
+    image: django_flask_pyand
+    command: /start_flask
+    volumes:
+      - ./bphis:/app
+    ports:
+      - 5000:5000
+    depends_on:
+      - redis
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=bpmonitor
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+  
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./bphis/Dockerfile
+    image: django_flask_pyand
+    command: /start-celeryworker
+    volumes:
+      - ./bphis:/app
+    depends_on:
+      - redis
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./bphis/Dockerfile
+    image: django_flask_pyand
+    command: /start-celerybeat
+    volumes:
+      - ./bphis:/app
+    depends_on:
+      - redis
+      - db
+  flower:
+    build:
+      context: .
+      dockerfile: ./bphis/Dockerfile
+    image: django_flask_pyand
+    command: /start-flower
+    volumes:
+      - ./bphis:/app
+    ports:
+      - 8001:5555
+    depends_on:
+      - redis
+      - db
+
+volumes:
+  postgres_data:

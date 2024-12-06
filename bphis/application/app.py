@@ -1,7 +1,9 @@
-from helpers import trigger_run_bluetooth, run_serial
 from flask import Flask, render_template
+from tasks import connect_to_bluetooth, connect_to_cable
 
 app = Flask(__name__)
+
+
 
 @app.route("/")
 def control():
@@ -9,18 +11,13 @@ def control():
 
 @app.route("/bluetooth")
 def bluetooth():
-    message = trigger_run_bluetooth()
-    if (message):
-        # message += "<a href='/'> Back to Home</a> <br>"
-        return message
-    return 'Running bluetooth connection'
+    connect_to_bluetooth.delay()
+    return "<a href='/'> Back to Home</a> <br>Running bluetooth connection"
+
 @app.route("/cable")
 def cable():
-    message = run_serial()
-    if (message):
-        message += "<a href='/'> Back to Home</a> <br>"
-        return message
-    return 'Running cable connection'
+    connect_to_cable.delay()
+    return "<a href='/'> Back to Home</a> <br>Running cable connection"
 
 
 if __name__ == '__main__':

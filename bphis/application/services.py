@@ -3,7 +3,7 @@ import requests
 
 def hitOpenApi(data):
   # url open api
-  url = 'http://localhost:8000/api/bp/'
+  url = 'http://192.168.74.211:30507/api/bp/'
 
   systolic, diastolic, pulse_rate, date, ihb, map, is_user_move, retest, measurement_time  = data
   r = requests.post(url, data={

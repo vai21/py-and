@@ -1,4 +1,4 @@
 #!/bin/bash
-
-python main.py &&
+cd application
+python main.py
 python manage.py runserver
