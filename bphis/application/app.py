@@ -11,15 +11,20 @@ def control():
 
 @app.route("/bluetooth")
 def bluetooth():
-    connect_to_bluetooth.delay()
-    return "<a href='/'> Back to Home</a> <br>Running bluetooth connection"
+    message = connect_to_bluetooth.delay()
+    print(f"response message: {message}")
+    return f"<a href='/'> Back to Home</a> \
+            <br>Running bluetooth connection<br> \
+            <a rel='noopener' href='http://localhost:5555/task/{message}' target='_blank'> Status </a>"
 
 @app.route("/cable")
 def cable():
-    connect_to_cable.delay()
-    return "<a href='/'> Back to Home</a> <br>Running cable connection"
+    message = connect_to_cable.delay()
+    print(f"response message: {message}")
+    return f"<a href='/'> Back to Home</a> \
+            <br>Running cable connection \
+            <a rel='noopener' href='http://localhost:5555/task/{message}' target='_blank'> Status </a>"
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-

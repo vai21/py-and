@@ -6,6 +6,7 @@ Set-Location .\application
 $runflask = Start-Process python -ArgumentList "app.py" -NoNewWindow -PassThru
 
 # Start celery
+$env:FLOWER_UNAUTHENTICATED_API="true"
 $runceleryworker = Start-Process celery -ArgumentList "-A tasks worker -l info --pool=solo" -NoNewWindow -PassThru
 $runcelerybeat = Start-Process celery -ArgumentList "-A tasks beat -l INFO" -NoNewWindow -PassThru
 $runceleryflower = Start-Process celery -ArgumentList "-A tasks flower" -NoNewWindow -PassThru
