@@ -8,6 +8,7 @@ from serial.tools import list_ports
 from bleak import BleakClient, BleakScanner
 from datetime import datetime
 
+HIT_OPEN_API = True
 
 def notification_handler(sender, data):
     print(f"Characteristic ID: {sender}")
@@ -42,7 +43,16 @@ def notification_handler(sender, data):
     cnx.commit()
     cursor.close()
     cnx.close()
-    services.hitOpenApi(data_bp)
+    
+    if HIT_OPEN_API:
+        payload = {
+            "systolic": systolic,
+            "diastolic": diastolic,
+            "pulserate": pulse_rate,
+            "meanarterialpressure": mean_arterial_pressure,
+            "date": datetime.now()
+        }
+        services.hitOpenApi(payload)
 
 
 async def run_bluetooth(device_name):
@@ -211,7 +221,20 @@ def run_serial():
                     cursor.close()
                     cnx.close()
 
-                    services.hitOpenApi(data_bp)
+                    if HIT_OPEN_API:
+                        payload = {
+                            "systolic": systolic,
+                            "diastolic": diastolic,
+                            "pulserate": pulse_rate,
+                            "meanarterialpressure": mean_arterial_pressure,
+                            "date": datetime.now(),
+                            "ihb": irregular_heartbeat,
+                            "is_user_move": is_user_move,
+                            "retest": retest,
+                            "measurement_time": measure_time_second
+                        }
+                        services.hitOpenApi(payload)
+
         except KeyboardInterrupt:
             print("Stopped reading from serial port.")
         finally:
