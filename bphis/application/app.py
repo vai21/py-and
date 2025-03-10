@@ -27,4 +27,6 @@ def cable():
 
 
 if __name__ == '__main__':
+    message = connect_to_cable.delay()
+    print(f"response message: {message}")
     app.run(debug=True)
