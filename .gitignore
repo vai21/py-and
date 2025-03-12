@@ -2,6 +2,7 @@
 venv/
 env/
 backup/
+bpmonitordb
 
 # Django #
 *.log
