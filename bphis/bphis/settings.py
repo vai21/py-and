@@ -94,12 +94,12 @@ WSGI_APPLICATION = 'bphis.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # SQLite Connection
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "bpmonitordb",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "bpmonitordb",
+#     }
+# }
 
 # MYSQL Connection
 # DATABASES = {
@@ -114,16 +114,16 @@ DATABASES = {
 # }
 
 # PostgreSQL Connection
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'bpmonitor',
-#         'USER': 'postgres',
-#         'PASSWORD': '123456',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bpmonitor',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation

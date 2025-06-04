@@ -2,7 +2,7 @@ import asyncio
 import struct
 import serial
 import time
-import pgConnection
+import dbConnection
 import services
 from serial.tools import list_ports
 from bleak import BleakClient, BleakScanner
@@ -35,7 +35,7 @@ def notification_handler(sender, data):
         "(systolic, diastolic, meanarterialpressure, pulserate, created_at) "
         "VALUES (%s, %s, %s, %s, %s)"
     )
-    cnx = pgConnection.connect()
+    cnx = dbConnection.connect()
     cursor = cnx.cursor()
 
     data_bp = (systolic, diastolic, mean_arterial_pressure, pulse_rate, datetime.now())
@@ -157,14 +157,14 @@ def run_serial():
                     line = ser.readline()
                     # Parse the blood pressure data
                     parts = line.split(b"\x1e")
-                    systolic = ""
-                    diastolic = ""
-                    pulse_rate = ""
-                    mean_arterial_pressure = ""
-                    irregular_heartbeat = ""
-                    user_move = ""
-                    retest = ""
-                    measure_time_second = ""
+                    systolic = 0
+                    diastolic = 0
+                    pulse_rate = 0
+                    mean_arterial_pressure = 0
+                    irregular_heartbeat = 0
+                    user_move = 0
+                    retest = 0
+                    measure_time_second = 0
 
                     for part in parts:
                         part_str = part.decode("ascii", errors="ignore")
@@ -198,7 +198,7 @@ def run_serial():
                         "(systolic, diastolic, pulserate, created_at, ihb, meanarterialpressure, is_user_move, retest, measurement_time) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     )
-                    cnx = pgConnection.connect()
+                    cnx = dbConnection.connect()
                     cursor = cnx.cursor()
 
                     is_user_move = False
@@ -255,3 +255,6 @@ def trigger_run_bluetooth():
         asyncio.run(run_bluetooth("TM-2657"))
     except Exception as e:
         return str(e)
+
+# Test search port name and description
+# find_com_port("Prolific", False)

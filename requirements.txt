@@ -39,6 +39,7 @@ kombu==5.4.2
 MarkupSafe==3.0.2
 more-itertools==10.5.0
 msgpack==1.1.0
+mysql-connector==2.2.9
 network==0.1
 packaging==24.1
 pexpect==4.9.0
