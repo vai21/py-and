@@ -1,6 +1,3 @@
-# Start manage.py runserver as another background process
-$server = Start-Process python -ArgumentList "manage.py runserver" -NoNewWindow -PassThru
-
 # Start flask as a background process
 Set-Location .\application
 $runflask = Start-Process python -ArgumentList "app.py" -NoNewWindow -PassThru
@@ -13,8 +10,7 @@ $runceleryflower = Start-Process celery -ArgumentList "-A tasks flower" -NoNewWi
 
 
 # Optional: Wait until both processes exit (if you want to ensure they complete)
-Wait-Process -Id $server.Id, $runflask.Id
+Wait-Process -Id $runflask.Id
 
 # Optionally print process IDs
 Write-Host "flask running with PID: $($runflask.Id)"
-Write-Host "django runserver running with PID: $($server.Id)"

@@ -1,4 +1,8 @@
-# Start manage.py runserver as another background process
+# Start manage.py runserver as another background process\
+$WorkingDirectory = "D:\moch.rasid_aam\Documents\py-and"
+Set-Location $WorkingDirectory
+.\env\Scripts\activate.ps1
+Set-Location .\bphis
 $server = Start-Process python -ArgumentList "manage.py runserver" -NoNewWindow -PassThru
 
 # Start flask as a background process

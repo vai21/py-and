@@ -2,12 +2,13 @@ import asyncio
 import struct
 import serial
 import time
-import pgConnection
+import dbConnection
 import services
 from serial.tools import list_ports
 from bleak import BleakClient, BleakScanner
 from datetime import datetime
 
+HIT_OPEN_API = True
 
 def notification_handler(sender, data):
     print(f"Characteristic ID: {sender}")
@@ -34,7 +35,7 @@ def notification_handler(sender, data):
         "(systolic, diastolic, meanarterialpressure, pulserate, created_at) "
         "VALUES (%s, %s, %s, %s, %s)"
     )
-    cnx = pgConnection.connect()
+    cnx = dbConnection.connect()
     cursor = cnx.cursor()
 
     data_bp = (systolic, diastolic, mean_arterial_pressure, pulse_rate, datetime.now())
@@ -42,7 +43,16 @@ def notification_handler(sender, data):
     cnx.commit()
     cursor.close()
     cnx.close()
-    services.hitOpenApi(data_bp)
+    
+    if HIT_OPEN_API:
+        payload = {
+            "systolic": systolic,
+            "diastolic": diastolic,
+            "pulserate": pulse_rate,
+            "meanarterialpressure": mean_arterial_pressure,
+            "date": datetime.now()
+        }
+        services.hitOpenApi(payload)
 
 
 async def run_bluetooth(device_name):
@@ -147,14 +157,14 @@ def run_serial():
                     line = ser.readline()
                     # Parse the blood pressure data
                     parts = line.split(b"\x1e")
-                    systolic = ""
-                    diastolic = ""
-                    pulse_rate = ""
-                    mean_arterial_pressure = ""
-                    irregular_heartbeat = ""
-                    user_move = ""
-                    retest = ""
-                    measure_time_second = ""
+                    systolic = 0
+                    diastolic = 0
+                    pulse_rate = 0
+                    mean_arterial_pressure = 0
+                    irregular_heartbeat = 0
+                    user_move = 0
+                    retest = 0
+                    measure_time_second = 0
 
                     for part in parts:
                         part_str = part.decode("ascii", errors="ignore")
@@ -188,7 +198,7 @@ def run_serial():
                         "(systolic, diastolic, pulserate, created_at, ihb, meanarterialpressure, is_user_move, retest, measurement_time) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     )
-                    cnx = pgConnection.connect()
+                    cnx = dbConnection.connect()
                     cursor = cnx.cursor()
 
                     is_user_move = False
@@ -211,7 +221,20 @@ def run_serial():
                     cursor.close()
                     cnx.close()
 
-                    services.hitOpenApi(data_bp)
+                    if HIT_OPEN_API:
+                        payload = {
+                            "systolic": systolic,
+                            "diastolic": diastolic,
+                            "pulserate": pulse_rate,
+                            "meanarterialpressure": mean_arterial_pressure,
+                            "date": datetime.now(),
+                            "ihb": irregular_heartbeat,
+                            "is_user_move": is_user_move,
+                            "retest": retest,
+                            "measurement_time": measure_time_second
+                        }
+                        services.hitOpenApi(payload)
+
         except KeyboardInterrupt:
             print("Stopped reading from serial port.")
         finally:
@@ -232,3 +255,6 @@ def trigger_run_bluetooth():
         asyncio.run(run_bluetooth("TM-2657"))
     except Exception as e:
         return str(e)
+
+# Test search port name and description
+# find_com_port("Prolific", False)
