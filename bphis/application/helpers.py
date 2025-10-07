@@ -35,14 +35,13 @@ def notification_handler(sender, data):
         "(systolic, diastolic, meanarterialpressure, pulserate, created_at) "
         "VALUES (%s, %s, %s, %s, %s)"
     )
-    cnx = dbConnection.connect()
-    cursor = cnx.cursor()
-
-    data_bp = (systolic, diastolic, mean_arterial_pressure, pulse_rate, datetime.now())
-    cursor.execute(add_bp, data_bp)
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+    # cnx = dbConnection.connect()
+    # cursor = cnx.cursor()
+    # data_bp = (systolic, diastolic, mean_arterial_pressure, pulse_rate, datetime.now())
+    # cursor.execute(add_bp, data_bp)
+    # cnx.commit()
+    # cursor.close()
+    # cnx.close()
     
     if HIT_OPEN_API:
         payload = {
@@ -193,33 +192,32 @@ def run_serial():
                     print(f"Retest: {retest}")
                     print(f"Measurement Time: {measure_time_second} (second)")
 
-                    add_bp = (
-                        "INSERT INTO bp_bp "
-                        "(systolic, diastolic, pulserate, created_at, ihb, meanarterialpressure, is_user_move, retest, measurement_time) "
-                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                    )
-                    cnx = dbConnection.connect()
-                    cursor = cnx.cursor()
-
                     is_user_move = False
                     if user_move == 1:
                         is_user_move = True
 
-                    data_bp = (
-                        systolic,
-                        diastolic,
-                        pulse_rate,
-                        datetime.now(),
-                        irregular_heartbeat,
-                        mean_arterial_pressure,
-                        is_user_move,
-                        retest,
-                        measure_time_second,
-                    )
-                    cursor.execute(add_bp, data_bp)
-                    cnx.commit()
-                    cursor.close()
-                    cnx.close()
+                    # add_bp = (
+                    #     "INSERT INTO bp_bp "
+                    #     "(systolic, diastolic, pulserate, created_at, ihb, meanarterialpressure, is_user_move, retest, measurement_time) "
+                    #     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    # )
+                    # cnx = dbConnection.connect()
+                    # cursor = cnx.cursor()
+                    # data_bp = (
+                    #     systolic,
+                    #     diastolic,
+                    #     pulse_rate,
+                    #     datetime.now(),
+                    #     irregular_heartbeat,
+                    #     mean_arterial_pressure,
+                    #     is_user_move,
+                    #     retest,
+                    #     measure_time_second,
+                    # )
+                    # cursor.execute(add_bp, data_bp)
+                    # cnx.commit()
+                    # cursor.close()
+                    # cnx.close()
 
                     if HIT_OPEN_API:
                         payload = {
