@@ -3,7 +3,7 @@ import requests
 
 def hitOpenApi(data):
   # url open api
-  url = 'http://172.16.0.201:8000/api/add-vital' # Alamat API Rumah Sakit (HIS)
+  url = 'http://172.16.0.201:8080/api/add-vital' # Alamat API Rumah Sakit (HIS)
   print(f"payload data: {data}")
   result = requests.post(url, data={
     'systolic': data.get('systolic'),
