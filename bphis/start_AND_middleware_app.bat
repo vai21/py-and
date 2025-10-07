@@ -1,6 +1,6 @@
 @echo off
 
-cd /d D:\moch.rasid_aam\Documents\py-and
-call venv\Scripts\activate
-cd /d D:\moch.rasid_aam\Documents\py-and\bphis\application
+cd /d C:\Users\NS LT 1\Workspace\py-and
+call env\Scripts\activate
+cd /d C:\Users\NS LT 1\Workspace\py-and\bphis\application
 python app.py
