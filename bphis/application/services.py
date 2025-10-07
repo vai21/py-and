@@ -15,6 +15,6 @@ def hitOpenApi(data):
     'retest': data.get('retest') or None,
     'measurement_time': data.get('measurement_time') or None,
     'created_at': data.get('date') or None,
-    'device_id': 'AND-01' # Device ID
+    'device_id': 'AND-02' # Device ID
   })
   print(f"result {result.text}")
