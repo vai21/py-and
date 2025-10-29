@@ -3,7 +3,7 @@ import requests
 
 def hitOpenApi(data):
   # url open api
-  url = 'http://172.16.0.201/api/add-vital' # Alamat API Rumah Sakit (HIS)
+  url = 'http://127.0.0.1/api/add-vital' # Alamat API Rumah Sakit (HIS)
   print(f"payload data: {data}")
   result = requests.post(url, data={
     'systolic': data.get('systolic'),
@@ -15,6 +15,6 @@ def hitOpenApi(data):
     'retest': data.get('retest') or None,
     'measurement_time': data.get('measurement_time') or None,
     'created_at': data.get('date') or None,
-    'device_id': 'AND-02' # Device ID
+    'device_id': 'AND-01' # Device ID
   })
   print(f"result {result.text}")
