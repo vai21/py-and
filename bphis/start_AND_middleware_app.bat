@@ -1,6 +1,6 @@
 @echo off
 
-cd /d C:\Users\Admin\Workspace\py-and
+cd /d C:\Users\User.KM\AND\py-and
 call env\Scripts\activate
-cd /d C:\Users\Admin\Workspace\py-and\bphis\application
+cd /d C:\Users\User.KM\AND\py-and\bphis\application
 python app.py
