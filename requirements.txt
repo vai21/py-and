@@ -73,5 +73,6 @@ trove-classifiers==2024.10.13
 tzdata==2024.2
 urllib3==2.2.3
 vine==5.1.0
+waitress==3.0.2
 wcwidth==0.2.13
 Werkzeug==3.1.3
