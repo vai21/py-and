@@ -185,7 +185,8 @@ def run_serial():
                             measure_time_second = int(part_str[2:])
                     print(f"Systolic: {systolic} mmHg")
                     print(f"Diastolic: {diastolic} mmHg")
-                    print(f"Mean Arterial Pressure: {mean_arterial_pressure} mmHg")
+                    if mean_arterial_pressure != 0:
+                        print(f"Mean Arterial Pressure: {mean_arterial_pressure} mmHg")
                     print(f"Pulse Rate: {pulse_rate} /min")
                     print(f"Irregular Heartbeat: {irregular_heartbeat} time(s)")
                     print(f"Is User Move: {user_move}")
