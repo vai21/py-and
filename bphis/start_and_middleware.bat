@@ -1,8 +1,8 @@
 @echo off
 
-cd /d C:\Users\User.KM\AND\py-and
+cd /d %USERPROFILE%\AND\py-and
 call env\Scripts\activate
-cd /d C:\Users\User.KM\AND\py-and\bphis\application
+cd /d %USERPROFILE%\AND\py-and\bphis\application
 set FLOWER_UNAUTHENTICATED_API="true"
 start "Celery Worker" cmd /k celery -A tasks worker -l info --pool=solo
 timeout /t 10 /nobreak
