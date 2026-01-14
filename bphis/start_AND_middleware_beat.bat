@@ -1,7 +1,7 @@
 @echo off
 
-cd /d D:\moch.rasid_aam\Documents\py-and
-call venv\Scripts\activate
-cd /d D:\moch.rasid_aam\Documents\py-and\bphis\application
+cd /d %USERPROFILE%\AND\py-and
+call env\Scripts\activate
+cd /d %USERPROFILE%\AND\py-and\bphis\application
 celery -A tasks beat -l INFO
 timeout /t 5 /nobreak

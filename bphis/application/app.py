@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from tasks import connect_to_bluetooth, connect_to_cable
+from waitress import serve
 
 app = Flask(__name__)
 
@@ -29,4 +30,5 @@ def cable():
 if __name__ == '__main__':
     message = connect_to_cable.delay()
     print(f"response message: {message}")
-    app.run(debug=True)
+    # app.run(debug=True)
+    serve(app, host='127.0.0.1', port=5000)

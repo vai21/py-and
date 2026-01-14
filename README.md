@@ -41,3 +41,20 @@ lalu jalankan aplikasi admin dengan  mengexecute command di bawah ini:
 
 
 python manage.py runserver
+
+Untuk autostart saat startup
+Buka Folder Startup:
+
+Tekan tombol Win+R untuk membuka dialog Run.
+
+Ketik shell:startup dan tekan Enter.
+
+Jendela File Explorer akan terbuka ke folder Startup Anda, biasanya di jalur seperti C:\Users\NamaUser\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup.
+
+Salin Skrip:
+
+Salin file .vbs Anda dan tempelkan langsung ke dalam folder Startup yang baru saja Anda buka.
+
+Alternatif: Buat shortcut dari file .vbs Anda, lalu salin/pindahkan shortcut tersebut ke folder Startup.
+
+Selesai: Skrip .vbs sekarang akan berjalan secara otomatis setiap kali Anda masuk ke akun Windows tersebut.

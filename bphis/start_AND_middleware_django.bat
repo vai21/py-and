@@ -1,6 +1,6 @@
 @echo off
 
-cd /d D:\moch.rasid_aam\Documents\py-and
-call venv\Scripts\activate
-cd /d D:\moch.rasid_aam\Documents\py-and\bphis
+cd /d %USERPROFILE%\AND\py-and
+call env\Scripts\activate
+cd /d %USERPROFILE%\AND\py-and\bphis
 python manage.py runserver
