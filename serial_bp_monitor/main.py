@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import queue
+import sys
 import threading
 import tkinter as tk
 from pathlib import Path
@@ -31,7 +32,20 @@ DEFAULT_BAUD = "2400"
 DEFAULT_BLE_NAME = "TM-2657"
 DEFAULT_BLE_MAC = "00:09:1F:8E:2B:3A"
 DEFAULT_OPEN_API = "http://127.0.0.1/api/add-vital"
-OUTPUT_DEFAULT = Path(__file__).resolve().parent / "bp_readings.txt"
+
+
+def _default_output_path() -> Path:
+    """Writable location when frozen (PyInstaller); dev uses project folder."""
+    if getattr(sys, "frozen", False):
+        if sys.platform == "darwin":
+            base = Path.home() / "Library" / "Application Support" / "BPSerialMonitor"
+            base.mkdir(parents=True, exist_ok=True)
+            return base / "bp_readings.txt"
+        return Path(sys.executable).resolve().parent / "bp_readings.txt"
+    return Path(__file__).resolve().parent / "bp_readings.txt"
+
+
+OUTPUT_DEFAULT = _default_output_path()
 
 
 class SerialBpApp(tk.Tk):

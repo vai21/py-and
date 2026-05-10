@@ -1,0 +1,2 @@
+# Install only on the machine that builds installers (not end users).
+pyinstaller>=6.3.0
